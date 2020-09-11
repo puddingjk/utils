@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="org.puddingjk.mapper.UserMapper">
+    <resultMap id="userMap" type="org.puddingjk.entity.User">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+    </resultMap>
+
+    <sql id="queryCondition">
+        <where>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+
+        </where>
+    </sql>
+	<!-- 查找用户信息 -->
+	<select id="findAllUser" resultType="org.puddingjk.entity.User">
+       select * from user
+    </select>
+    <select id="getByMap" parameterType="map" resultMap="userMap">
+    	SELECT * FROM user
+		<include refid="queryCondition" />
+    </select>
+    
+    <select id="getById" parameterType="int" resultMap="userMap">
+    	SELECT * FROM user WHERE id =#{id}
+    </select>
+    
+    <insert id="create" parameterType="org.puddingjk.entity.User">
+        <selectKey resultType="int"  order="AFTER" keyProperty="id" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO user(
+			id,
+			name
+		)VALUES(
+			#{id},
+			#{name}
+		)
+    </insert>
+    
+    <update id="update" parameterType="org.puddingjk.entity.User">
+		UPDATE user SET
+			name = #{name}
+		WHERE id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+    	DELETE FROM user WHERE id = #{id}
+    </delete>
+    
+</mapper>

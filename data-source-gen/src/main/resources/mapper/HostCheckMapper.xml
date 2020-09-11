@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.puddingjk.mapper.HostCheckMapper">
+
+    <sql id="aaa">
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+
+        </where>
+    </sql>
+
+    <select id="pageList" resultType="org.puddingjk.entity.HostCheck" parameterType="org.puddingjk.entity.dto.HostCheckDTO">
+        select * from host_check where delete_flag =0
+        <if test="obj.mnCode !=null and obj.mnCode!=''">
+            and locate (#{obj.mnCode} , mn_code) > 0
+        </if>
+        <if test="obj.qrCode !=null and obj.qrCode!=''">
+            and locate (#{obj.qrCode} , qr_code) > 0
+        </if>
+        <if test="obj.cpuCode !=null and obj.cpuCode!=''">
+            and locate (#{obj.cpuCode} , cpu_code) > 0
+        </if>
+        <if test="obj.startTime !=null and obj.startTime!=''">
+            <if test="obj.endTime !=null and obj.endTime!=''">
+                and associated_time between #{obj.startTime} and  #{obj.endTime}
+            </if>
+        </if>
+        order by create_time desc
+    </select>
+
+
+</mapper>
