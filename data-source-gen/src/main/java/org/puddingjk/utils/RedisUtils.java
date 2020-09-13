@@ -11,11 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisUtils extends RedisTemplate{
 
-    public RedisUtils(RedisConnectionFactory connectionFactory) {
+    public RedisUtils() {
         this.setKeySerializer(RedisSerializer.string());
         this.setValueSerializer(RedisSerializer.string());
         this.setHashKeySerializer(RedisSerializer.string());
         this.setHashValueSerializer(RedisSerializer.string());
+    }
+
+    public RedisUtils(RedisConnectionFactory connectionFactory) {
+        this();
         this.setConnectionFactory(connectionFactory);
         this.afterPropertiesSet();
     }
