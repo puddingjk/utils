@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@MapperScan("com.wanwei.oneview.mapper")
+@MapperScan("org.puddingjk.mapper")
 @EnableAsync
 @EnableTransactionManagement
 @EnableFeignClients

@@ -1,22 +1,24 @@
 package org.puddingjk.utils;
 
 import org.puddingjk.common.Constants;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 @Component
-public class RedisUtils {
+public class RedisUtils extends RedisTemplate{
 
-    private RedisTemplate redisTemplate;
-
-    public RedisUtils(RedisTemplate redisTemplate) {
-        Objects.requireNonNull(redisTemplate);
-        this.redisTemplate =redisTemplate;
+    public RedisUtils(RedisConnectionFactory connectionFactory) {
+        this.setKeySerializer(RedisSerializer.string());
+        this.setValueSerializer(RedisSerializer.string());
+        this.setHashKeySerializer(RedisSerializer.string());
+        this.setHashValueSerializer(RedisSerializer.string());
+        this.setConnectionFactory(connectionFactory);
+        this.afterPropertiesSet();
     }
-
 
     /***
      * 持有锁
@@ -24,7 +26,7 @@ public class RedisUtils {
      * @return
      */
     public boolean lock(String key) {
-        return (boolean) redisTemplate.execute((RedisCallback) redisConnection -> {
+        return (boolean) super.execute((RedisCallback) redisConnection -> {
             StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
             stringRedisSerializer.serialize(key);
             stringRedisSerializer.serialize(key);
@@ -55,8 +57,8 @@ public class RedisUtils {
      * @return
      */
     public void unLock(String key){
-        redisTemplate.setKeySerializer(new StringRedisSerializer());//设置序列化
-        redisTemplate.delete(key);
+        super.setKeySerializer(new StringRedisSerializer());//设置序列化
+        super.delete(key);
     }
 
 }
