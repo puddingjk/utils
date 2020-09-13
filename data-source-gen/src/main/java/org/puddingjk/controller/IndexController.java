@@ -34,7 +34,7 @@ public class IndexController {
         return "success";
     }
 
-    @GetMapping("/t")
+    @GetMapping("/tsss")
     public List<User> queryData(){
         List<User> allUser = userService.findAllUser();
         return allUser;
