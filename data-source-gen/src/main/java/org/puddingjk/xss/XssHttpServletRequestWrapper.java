@@ -22,13 +22,14 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     private byte[] requestBody;
     private Charset charSet;
     private static final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
+
     public XssHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
         //缓存请求body
         try {
             String requestBodyStr = getRequestPostStr(request);
             if (StringUtils.isNotBlank(requestBodyStr)) {
-                requestBodyStr=filter(requestBodyStr);
+                requestBodyStr = filter(requestBodyStr);
                 JSONObject resultJson = JSONObject.parseObject(requestBodyStr);
                 requestBody = resultJson.toString().getBytes(charSet);
             } else {
@@ -40,7 +41,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     }
 
     private static String filter(String value) {
-        if(value!=null) {
+        if (value != null) {
             value = Jsoup.clean(value, "", Whitelist.relaxed(), outputSettings).trim();
         }
         return value;

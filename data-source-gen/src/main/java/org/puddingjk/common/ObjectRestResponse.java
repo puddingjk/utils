@@ -6,23 +6,24 @@ package org.puddingjk.common;
  * @Author : LuoHongyu
  * @Date: 2020-08-24 14:02
  */
-public class ObjectRestResponse <T> extends BaseResponse {
+public class ObjectRestResponse<T> extends BaseResponse {
 
     T data;
-    boolean rel=true;
+    boolean rel = true;
 
     public ObjectRestResponse() {
     }
 
     public static <E> ObjectRestResponse<E> ok(E o) {
-        return new ObjectRestResponse<>(200,"操作成功", o,true);
+        return new ObjectRestResponse<>(200, "操作成功", o, true);
     }
 
     public static <E> ObjectRestResponse<E> error() {
-        return new ObjectRestResponse<>(500,"操作失败",null,false);
+        return new ObjectRestResponse<>(500, "操作失败", null, false);
     }
+
     public static <E> ObjectRestResponse<E> validateError(E o) {
-        return new ObjectRestResponse<>(200,"验证失败",o,true);
+        return new ObjectRestResponse<>(200, "验证失败", o, true);
     }
 
 
@@ -51,6 +52,7 @@ public class ObjectRestResponse <T> extends BaseResponse {
         this.setData(data);
         return this;
     }
+
     public T getData() {
         return data;
     }

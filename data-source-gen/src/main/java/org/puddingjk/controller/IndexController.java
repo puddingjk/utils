@@ -3,13 +3,16 @@ package org.puddingjk.controller;
 import org.puddingjk.entity.User;
 import org.puddingjk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.puddingjk.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +27,8 @@ public class IndexController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisUtils redisUtils;
     @GetMapping("/")
     public String test(){
         return "success";
@@ -50,5 +55,15 @@ public class IndexController {
         } catch (UnknownHostException e) {
             log.error("InetAddress.getLocalHost():{} "+ e);
         }
+    }
+
+
+    @GetMapping("/list")
+    public void listUser() throws InterruptedException {
+        while (!redisUtils.lock("lock:" + "user1")) {
+            Thread.sleep(3000);
+            System.out.println("等待=========================");
+        }
+//        redisUtils.unLock("lock:"+1);
     }
 }
